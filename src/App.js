@@ -23,8 +23,27 @@ class App extends Component {
       box: {},
       route: 'signIn',
       isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+      }
     }
   }
+
+  loadUser = (data) => {
+    this.setState({user: {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined
+  }})
+}
+
+  
   // // componentDidMount() {
   // //   fetch('http://localhost:3000')
   // //   .then(response => response.json())
@@ -70,12 +89,12 @@ class App extends Component {
     const { isSignedIn, imageURL, route, box } = this.state;
   return (
     <div className='App'>
-      <ParticlesBg className='bg' num={300} color="#ffffff" type="cobweb" bg={true} />
+      <ParticlesBg className='bg' num={160} color="#363636" type="cobweb" bg={true} />
       <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
       { route === 'home'
         ? <div> 
             <Logo />
-            <Rank />
+            <Rank name={this.state.user.name} entries={this.state.user.entries}/>
             <ImageLinkForm 
             onInputChange={this.onInputChange} 
             onButtonSubmit={this.onButtonSubmit}/>
@@ -83,8 +102,8 @@ class App extends Component {
          </div>
           : (
             route === 'signIn' 
-          ? <SignIn onRouteChange={this.onRouteChange} />
-          : <Register onRouteChange={this.onRouteChange} />
+          ? <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+          : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
           )
 }
 
